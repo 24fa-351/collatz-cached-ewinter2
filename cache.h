@@ -6,7 +6,7 @@
 
 #include "collatz.h"
 
-#define CACHE_SIZE 1000 //Define maximum cache size here
+#define CACHE_SIZE 1000000 //Define maximum cache size here
 
 //Cache structure 
 typedef struct {
