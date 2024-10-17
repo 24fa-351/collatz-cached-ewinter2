@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "cache.h"
 #include "collatz.c"
@@ -68,18 +69,28 @@ void remove_node(CacheEntry* node) {
     cache_size--;
 }
 
-void insert_in_cache(int num, int steps_to_one) {
+void remove_node_mru() {
+    if (head == NULL) {
+        remove_node(head);
+    }
+}
+
+void insert_in_cache(int num, int steps_to_one, char* policy) {
     CacheEntry* new_entry = (CacheEntry*)malloc(sizeof(CacheEntry));
     new_entry->number = num;
     new_entry->steps_to_one = steps_to_one;
     add_to_front(new_entry);
 
     if(cache_size > max_cache_size) {
-        remove_node(tail);
+        if (strcmp(policy, "LRU") == 0) {
+            remove_node(tail);
+        } else if (strcmp(policy, "MRU") == 0) {
+            remove_node_mru();
+        }
     }
 }
 
-int get_collatz_steps(int num) {
+int get_collatz_steps_to_one(int num, char* policy_input) {}
     CacheEntry *entry = search_cache(num);
     if (entry != NULL) {
         remove_node(entry);
@@ -89,7 +100,7 @@ int get_collatz_steps(int num) {
 
     int steps_calculated = collatz_steps(num);
 
-    insert_in_cache(num, steps_calculated);
+    insert_in_cache(num, steps_calculated, policy_input);
 
     return steps_calculated;
 }
